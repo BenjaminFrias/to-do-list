@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>To-do List</title>
+
+		<!-- FONTS -->
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap"
+			rel="stylesheet"
+		/>
+
+		<link
+			rel="stylesheet"
+			href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+		/>
+	</head>
+	<body>
+		<div class="container">
+			<!-- SIDEBAR -->
+			<div class="sidebar">
+				<h1 class="logo">To-do list</h1>
+				<ul class="default-sidebar-list">
+					<li>
+						<button type="button" class="sidebar-project-btn">
+							<i class="material-symbols-rounded icon"> home </i>
+							<span>Inbox</span>
+						</button>
+					</li>
+					<li>
+						<button type="button" class="sidebar-project-btn">
+							<i class="material-symbols-rounded icon">
+								schedule
+							</i>
+							<span>Today</span>
+						</button>
+					</li>
+					<li>
+						<button type="button" class="sidebar-project-btn">
+							<i class="material-symbols-rounded icon">
+								event_note
+							</i>
+							<span>Upcoming</span>
+						</button>
+					</li>
+				</ul>
+				<div class="sidebar-projects">
+					<h2>Projects</h2>
+					<ul class="projects-sidebar-list">
+						<li>
+							<button type="button" class="project-btn">
+								<i class="material-symbols-rounded icon">
+									stat_0
+								</i>
+								<span>Family</span>
+							</button>
+						</li>
+					</ul>
+
+					<button type="button" id="add-new-project-btn">
+						<i class="material-symbols-rounded icon"> add </i>
+						<span>New project</span>
+					</button>
+				</div>
+				<button type="button" id="sidebar-toggle-btn">
+					<span class="toggle-icon"><</span>
+				</button>
+			</div>
+
+			<!-- Main to-do's container -->
+			<div class="main-to-do-list">
+				<h2 id="project-name">Inbox</h2>
+				<div class="division-line"></div>
+				<p class="to-dos-length">1 task</p>
+				<ul class="to-do-list">
+					<li class="to-do-item">
+						<input
+							type="checkbox"
+							name="to-do-complete"
+							class="to-do-complete-btn"
+						/>
+						<p class="to-do-title">Buy groceries</p>
+						<button type="button" class="to-do-priority">
+							<i class="material-symbols-rounded icon">
+								radio_button_checked
+							</i>
+						</button>
+					</li>
+				</ul>
+				<button type="button" id="new-to-do-btn">New to do</button>
+			</div>
+
+			<!-- Edit to do div -->
+			<div class="edit-to-do-bg">
+				<div class="edit-to-do"></div>
+			</div>
+		</div>
+	</body>
+</html>
