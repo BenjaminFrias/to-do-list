@@ -17,6 +17,13 @@
 			rel="stylesheet"
 			href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
 		/>
+
+		<!-- SCRIPTS -->
+		<link
+			rel="stylesheet"
+			href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
+		/>
+		<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 	</head>
 	<body>
 		<div class="container">
@@ -76,7 +83,7 @@
 				<div class="division-line"></div>
 				<p class="to-dos-length">1 task</p>
 				<ul class="to-do-list">
-					<li class="to-do-item">
+					<li class="to-do-item" style="display: none">
 						<input
 							type="checkbox"
 							name="to-do-complete"
@@ -93,9 +100,123 @@
 				<button type="button" id="new-to-do-btn">New to do</button>
 			</div>
 
-			<!-- Edit to do div -->
-			<div class="edit-to-do-bg">
-				<div class="edit-to-do"></div>
+			<!-- Create and edit to do pop up -->
+			<div class="blurry-bg active">
+				<div id="to-do-pop-up">
+					<input
+						type="text"
+						name="to-do-title"
+						id="to-do-title"
+						placeholder="Task name"
+						autocomplete="off"
+					/>
+					<input
+						type="text"
+						name="description"
+						id="to-do-description"
+						placeholder="Description"
+						autocomplete="off"
+					/>
+					<div>
+						<p>Project</p>
+
+						<div class="projects-select">
+							<button type="button" class="select-label">
+								Inbox
+							</button>
+							<div class="select-options">
+								<button type="button" class="option">
+									Option 1
+								</button>
+								<button type="button" class="option">
+									Option 2
+								</button>
+								<button type="button" class="option">
+									Option 3
+								</button>
+							</div>
+
+							<input
+								type="hidden"
+								name="selected-option"
+								id="selected-option"
+							/>
+						</div>
+					</div>
+					<div>
+						<p>Due date</p>
+						<div class="flatpickr" id="date-container">
+							<input
+								type="text"
+								name="to-do-date"
+								id="to-do-date"
+								placeholder="Select a due date"
+								autocomplete="off"
+								data-input
+							/>
+
+							<i
+								class="material-symbols-rounded icon input-button"
+								title="toggle"
+								data-toggle
+							>
+								calendar_month
+							</i>
+							<i
+								class="material-symbols-rounded icon input-button"
+								title="clear"
+								data-clear
+							>
+								close
+							</i>
+						</div>
+					</div>
+					<div>
+						<p>Priority</p>
+						<div id="priority-select" class="projects-select">
+							<button type="button" class="select-label">
+								None
+							</button>
+							<div class="select-options">
+								<button
+									type="button"
+									class="option"
+									data-priority="high"
+								>
+									High
+								</button>
+								<button
+									type="button"
+									class="option"
+									data-priority="medium"
+								>
+									Medium
+								</button>
+								<button
+									type="button"
+									class="option"
+									data-priority="low"
+								>
+									Low
+								</button>
+								<button
+									type="button"
+									class="option"
+									data-priority="none"
+								>
+									None
+								</button>
+							</div>
+
+							<input
+								type="hidden"
+								name="selected-option"
+								id="selected-option"
+							/>
+						</div>
+					</div>
+					<button type="button" id="save-to-do">Save task</button>
+				</div>
 			</div>
 		</div>
 	</body>
