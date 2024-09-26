@@ -1,7 +1,7 @@
 export function createTodoFactory(
 	title,
-	description = "Add a description",
-	dueDate,
+	description = "",
+	dueDate = "No due date",
 	priority = "Low",
 	project = "Inbox"
 ) {
