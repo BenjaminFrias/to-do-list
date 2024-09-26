@@ -302,37 +302,39 @@ input[type="checkbox"]:checked::after {
 	padding: 0;
 }
 
-/* CUSTOM SELECT INPUT */
-
-.select-options {
-	display: none;
-}
-
-.select-options.open {
-	display: flex;
-	flex-direction: column;
-	gap: 5px;
-	position: absolute;
-	background: red;
+#to-do-pop-up select {
+	border: none;
+	color: var(--black);
+	font-weight: 500;
+	font-family: "DM Sans", Helvetica, sans-serif;
+	padding: 5px 10px;
 	border-radius: 5px;
+	width: 30%;
+	cursor: pointer;
+	line-height: 1.1;
 	background: var(--light-gray);
-	padding: 15px;
 }
 
-#to-do-pop-up .select-options.open button.option {
-	background: var(--white);
+option {
+	text-align: left;
+	font-weight: 500;
+	background: var(--light-gray);
 }
 
-.select-options button[data-priority="high"] {
-	color: var(--High-priority);
+option:hover {
+	background: red;
 }
 
-.select-options button[data-priority="medium"] {
+#to-do-priority option:nth-of-type(2) {
+	color: var(--Low-priority);
+}
+
+#to-do-priority option:nth-of-type(3) {
 	color: var(--Medium-priority);
 }
 
-.select-options button[data-priority="low"] {
-	color: var(--Low-priority);
+#to-do-priority option:nth-of-type(4) {
+	color: var(--High-priority);
 }
 
 /* TODO INPUTS */
@@ -393,7 +395,7 @@ button#close-pop-up {
 }
 
 .flatpickr-calendar {
-	font-family: "Inter", Arial, Helvetica, sans-serif;
+	font-family: "DM Sans", Arial, Helvetica, sans-serif;
 }
 
 input#to-do-date.flatpickr-input {

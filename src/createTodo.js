@@ -3,15 +3,13 @@ export function createTodoFactory(
 	description = "Add a description",
 	dueDate,
 	priority = "Low",
-	notes = "Add notes",
-	project = "default"
+	project = "Inbox"
 ) {
 	return {
 		title,
 		description,
 		dueDate,
 		priority,
-		notes,
 		project,
 	};
 }

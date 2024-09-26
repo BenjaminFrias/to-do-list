@@ -110,6 +110,7 @@
 							id="to-do-title"
 							placeholder="Task name"
 							autocomplete="off"
+							required
 						/>
 						<button type="button" id="close-pop-up">
 							<i class="material-symbols-rounded icon"> close </i>
@@ -125,28 +126,9 @@
 					<div>
 						<p>Project</p>
 
-						<div class="projects-select">
-							<button type="button" class="select-label">
-								Inbox
-							</button>
-							<div class="select-options">
-								<button type="button" class="option">
-									Option 1
-								</button>
-								<button type="button" class="option">
-									Option 2
-								</button>
-								<button type="button" class="option">
-									Option 3
-								</button>
-							</div>
-
-							<input
-								type="hidden"
-								name="selected-option"
-								id="selected-option"
-							/>
-						</div>
+						<select name="priority" id="priority">
+							<option value="Inbox">Inbox</option>
+						</select>
 					</div>
 					<div>
 						<p>Due date</p>
@@ -178,48 +160,14 @@
 					</div>
 					<div>
 						<p>Priority</p>
-						<div id="priority-select" class="projects-select">
-							<button type="button" class="select-label">
-								None
-							</button>
-							<div class="select-options">
-								<button
-									type="button"
-									class="option"
-									data-priority="high"
-								>
-									High
-								</button>
-								<button
-									type="button"
-									class="option"
-									data-priority="medium"
-								>
-									Medium
-								</button>
-								<button
-									type="button"
-									class="option"
-									data-priority="low"
-								>
-									Low
-								</button>
-								<button
-									type="button"
-									class="option"
-									data-priority="none"
-								>
-									None
-								</button>
-							</div>
-
-							<input
-								type="hidden"
-								name="selected-option"
-								id="selected-option"
-							/>
-						</div>
+						<select name="to-do-priority" id="to-do-priority">
+							<option value="none" selected>None</option>
+							<option value="low">Low</option>
+							<option value="medium">Medium</option>
+							<option value="high">High</option>
+						</select>
 					</div>
+
 					<button type="button" id="save-to-do">Save task</button>
 				</div>
 			</div>
