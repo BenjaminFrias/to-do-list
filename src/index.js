@@ -63,14 +63,18 @@ function loadTask(project) {
 	toDoList.innerHTML = "";
 
 	if (project == "Inbox") {
-		todoItems.forEach((item) => {
+		todoItems.forEach((item, i) => {
 			const toDoItem = document.createElement("li");
 			toDoItem.classList.add("to-do-item");
 
 			const completeInput = document.createElement("input");
 			completeInput.type = "checkbox";
 			completeInput.name = "to-do-complete";
-			toDoItem.classList.add("to-do-complete-btn");
+
+			completeInput.addEventListener("click", () => {
+				toDoList.removeChild(toDoItem);
+				todoItems.splice(i, 1);
+			});
 
 			const toDoTitle = document.createElement("p");
 			toDoTitle.classList.add("to-do-title");
