@@ -5,7 +5,6 @@
 	--black: #202020;
 	--gray: #777777;
 	--light-gray: #f2f2f2;
-
 	--High-priority: #e72929;
 	--Medium-priority: #fb9048;
 	--Low-priority: #87a2ff;
@@ -137,13 +136,17 @@ button.project-btn {
 
 /* MAIN TODO CONTENT */
 
-.main-to-do-list {
+.main-to-do-list-container {
 	display: flex;
 	flex-direction: column;
 	gap: 20px;
 	flex: 4;
 	padding: 25px 40px;
 	background: var(--white);
+}
+
+ul#to-do-list {
+	padding: 0;
 }
 
 #project-name {
@@ -183,7 +186,7 @@ button.project-btn {
 	gap: 5px;
 	width: 150px;
 	height: 40px;
-	margin: 15px 5px 0px 5px;
+	margin: 0;
 	background: var(--black);
 	border-radius: 8px;
 	color: var(--white);
@@ -249,7 +252,22 @@ input[type="checkbox"]:checked::after {
 .to-do-priority i {
 	margin-top: 1px;
 	scale: 0.7;
-	color: rgb(235, 55, 55);
+}
+
+i.none {
+	color: var(--gray);
+}
+
+i.high {
+	color: var(--High-priority);
+}
+
+i.medium {
+	color: var(--Medium-priority);
+}
+
+i.low {
+	color: var(--Low-priority);
 }
 
 .to-do-priority::before {
