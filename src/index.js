@@ -72,8 +72,12 @@ function loadTask(project) {
 			completeInput.name = "to-do-complete";
 
 			completeInput.addEventListener("click", () => {
-				toDoList.removeChild(toDoItem);
-				todoItems.splice(i, 1);
+				toDoItem.classList.add("completed");
+
+				setTimeout(() => {
+					todoItems.splice(i, 1);
+					toDoList.removeChild(toDoItem);
+				}, 300);
 			});
 
 			const toDoTitle = document.createElement("p");
