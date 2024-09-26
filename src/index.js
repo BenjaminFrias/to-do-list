@@ -17,6 +17,7 @@ let currentProject = "Inbox";
 const todoItems = [];
 
 loadTask(currentProject);
+UpdateNumberOfTask();
 
 // Save new todo button
 saveNewTodoBtn.addEventListener("click", () => {
@@ -26,6 +27,8 @@ saveNewTodoBtn.addEventListener("click", () => {
 		toDoPopUpContainer.classList.remove("active");
 		addTodo(getTodoValues());
 		loadTask(currentProject);
+		clearInputFields();
+		UpdateNumberOfTask();
 	}
 });
 
@@ -55,8 +58,13 @@ function addTodo() {
 	);
 
 	todoItems.push(newTodo);
+}
 
-	clearInputFields();
+function UpdateNumberOfTask() {
+	const numberOfTasks = document.querySelector("#to-dos-length");
+	const todoLength = todoItems.length;
+
+	numberOfTasks.textContent = `${todoLength} Tasks`;
 }
 
 function loadTask(project) {
@@ -77,6 +85,7 @@ function loadTask(project) {
 				setTimeout(() => {
 					todoItems.splice(i, 1);
 					toDoList.removeChild(toDoItem);
+					UpdateNumberOfTask();
 				}, 300);
 			});
 
