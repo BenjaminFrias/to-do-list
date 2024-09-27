@@ -19,13 +19,13 @@ const saveNewProjectBtn = document.querySelector("#save-project-pop-up");
 const closeProjectPopUp = document.querySelector("#close-project-pop-up");
 const newProjectInput = document.querySelector("#new-project-title");
 const projectSidebarList = document.querySelector(".projects-sidebar-list");
+const mainPageTitle = document.querySelector("#project-name");
 
 let currentProject = "Inbox";
 const todoItems = [];
 export const userProjects = [];
 
-loadTask(currentProject);
-UpdateNumberOfTask();
+loadMainPage(currentProject);
 
 // Save new todo button
 saveNewTodoBtn.addEventListener("click", () => {
@@ -36,12 +36,22 @@ saveNewTodoBtn.addEventListener("click", () => {
 		addTodo(getTodoValues());
 		loadTask(currentProject);
 		clearInputFields();
-		UpdateNumberOfTask();
+		updateNumberOfTasks();
 	}
 });
 
 // Toggle to do pop up div
 newTodoBtn.addEventListener("click", () => {
+	// Select option for current project
+	const options = toDoProject.querySelectorAll("option");
+	for (let i = 0; i < options.length; i++) {
+		if (options[i].value === currentProject) {
+			options[i].selected = true;
+		} else {
+			options[i].selected = false;
+		}
+	}
+
 	toDoPopUpContainer.classList.add("active");
 });
 
@@ -69,7 +79,7 @@ function addTodo() {
 
 // Create new todo pop up
 
-function UpdateNumberOfTask() {
+function updateNumberOfTasks() {
 	const numberOfTasks = document.querySelector("#to-dos-length");
 	const todoLength = todoItems.length;
 
@@ -127,12 +137,20 @@ function loadProjects() {
 		button.appendChild(span);
 
 		button.addEventListener("click", () => {
-			console.log(button);
+			currentProject = userProjects[i];
+			loadMainPage(currentProject);
 		});
 
 		projectItem.appendChild(button);
 		projectSidebarList.appendChild(projectItem);
 	}
+}
+
+function loadMainPage(project) {
+	mainPageTitle.textContent = project;
+	updateNumberOfTasks();
+
+	loadTask(project);
 }
 
 // Load tasks
@@ -155,7 +173,7 @@ function loadTask(project) {
 				setTimeout(() => {
 					todoItems.splice(i, 1);
 					toDoList.removeChild(toDoItem);
-					UpdateNumberOfTask();
+					updateNumberOfTasks();
 				}, 300);
 			});
 
