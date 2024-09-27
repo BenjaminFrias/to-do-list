@@ -89,6 +89,14 @@ saveNewProjectBtn.addEventListener("click", () => {
 	} else {
 		newProjectPopUp.classList.remove("active");
 		userProjects.push(projectName);
+
+		// Create the option for new todo
+		const option = document.createElement("option");
+		option.value = projectName;
+		option.textContent = projectName;
+		toDoProject.appendChild(option);
+
+		// Update sidebar projects
 		loadProjects();
 		newProjectInput.value = "";
 	}
