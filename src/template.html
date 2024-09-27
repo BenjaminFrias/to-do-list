@@ -56,16 +56,7 @@
 				</ul>
 				<div class="sidebar-projects">
 					<h2>Projects</h2>
-					<ul class="projects-sidebar-list">
-						<li>
-							<button type="button" class="project-btn">
-								<i class="material-symbols-rounded icon">
-									stat_0
-								</i>
-								<span>Family</span>
-							</button>
-						</li>
-					</ul>
+					<ul class="projects-sidebar-list"></ul>
 
 					<button type="button" id="add-new-project-btn">
 						<i class="material-symbols-rounded icon"> add </i>
@@ -155,6 +146,23 @@
 					</div>
 
 					<button type="button" id="save-to-do">Save task</button>
+				</div>
+			</div>
+			<div id="new-project-pop-up-container">
+				<div id="new-project-pop-up">
+					<input
+						type="text"
+						name="new-project-title"
+						id="new-project-title"
+						placeholder="Project name"
+						autocomplete="off"
+					/>
+					<button type="button" id="save-project-pop-up">
+						<i class="material-symbols-rounded icon"> add_box </i>
+					</button>
+					<button type="button" id="close-project-pop-up">
+						<i class="material-symbols-rounded icon"> close </i>
+					</button>
 				</div>
 			</div>
 		</div>

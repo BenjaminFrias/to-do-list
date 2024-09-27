@@ -1,6 +1,7 @@
 import "./styles.css";
 import "./reset.css";
 import { createTodoFactory } from "./createTodo";
+import { createProject } from "./createProject";
 
 const newTodoBtn = document.querySelector("#new-to-do-btn");
 const toDoPopUpContainer = document.querySelector("#to-do-pop-up-container");
@@ -12,9 +13,16 @@ const toDoProject = document.querySelector("#to-do-project");
 const toDoDueDate = document.querySelector("#to-do-date");
 const toDoPriority = document.querySelector("#to-do-priority");
 const toDoList = document.querySelector("#to-do-list");
+const newProjectPopUp = document.querySelector("#new-project-pop-up-container");
+const newProjectBtn = document.querySelector("#add-new-project-btn");
+const saveNewProjectBtn = document.querySelector("#save-project-pop-up");
+const closeProjectPopUp = document.querySelector("#close-project-pop-up");
+const newProjectInput = document.querySelector("#new-project-title");
+const projectSidebarList = document.querySelector(".projects-sidebar-list");
 
 let currentProject = "Inbox";
 const todoItems = [];
+export const userProjects = [];
 
 loadTask(currentProject);
 UpdateNumberOfTask();
@@ -34,7 +42,6 @@ saveNewTodoBtn.addEventListener("click", () => {
 
 // Toggle to do pop up div
 newTodoBtn.addEventListener("click", () => {
-	// Close pop up
 	toDoPopUpContainer.classList.add("active");
 });
 
@@ -60,12 +67,67 @@ function addTodo() {
 	todoItems.push(newTodo);
 }
 
+// Create new todo pop up
+
 function UpdateNumberOfTask() {
 	const numberOfTasks = document.querySelector("#to-dos-length");
 	const todoLength = todoItems.length;
 
 	numberOfTasks.textContent = `${todoLength} Tasks`;
 }
+
+// Create new project
+
+newProjectBtn.addEventListener("click", () => {
+	newProjectPopUp.classList.add("active");
+});
+
+saveNewProjectBtn.addEventListener("click", () => {
+	const projectName = newProjectInput.value;
+	if (projectName == "") {
+		alert("Please enter a project name");
+	} else {
+		newProjectPopUp.classList.remove("active");
+		userProjects.push(projectName);
+		loadProjects();
+		newProjectInput.value = "";
+	}
+});
+
+closeProjectPopUp.addEventListener("click", () => {
+	newProjectInput.value = "";
+	newProjectPopUp.classList.remove("active");
+});
+
+function loadProjects() {
+	projectSidebarList.innerHTML = "";
+
+	for (let i = 0; i < userProjects.length; i++) {
+		const projectItem = document.createElement("li");
+
+		const button = document.createElement("button");
+		button.type = "button";
+		button.className = "project-btn";
+
+		const icon = document.createElement("i");
+		icon.className = "material-symbols-rounded icon";
+		icon.textContent = "stat_0";
+		button.appendChild(icon);
+
+		const span = document.createElement("span");
+		span.textContent = userProjects[i];
+		button.appendChild(span);
+
+		button.addEventListener("click", () => {
+			console.log(button);
+		});
+
+		projectItem.appendChild(button);
+		projectSidebarList.appendChild(projectItem);
+	}
+}
+
+// Load tasks
 
 function loadTask(project) {
 	toDoList.innerHTML = "";

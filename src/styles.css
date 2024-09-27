@@ -39,6 +39,7 @@ li {
 	display: flex;
 	width: 100vw;
 	height: 100vh;
+	overflow-x: hidden;
 	font-family: "DM Sans", Helvetica, sans-serif;
 }
 
@@ -121,8 +122,8 @@ h1 {
 
 .projects-sidebar-list {
 	display: flex;
+	flex-direction: column;
 	margin-top: 10px;
-	gap: 5px;
 	width: 100%;
 }
 
@@ -299,7 +300,8 @@ i.low {
 
 /* CREATE TODO POP UP */
 
-#to-do-pop-up {
+#to-do-pop-up,
+#new-project-pop-up {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-evenly;
@@ -431,9 +433,45 @@ input#to-do-date.flatpickr-input {
 	border-radius: 10px;
 }
 
+/* NEW PROJECT POP UP */
+
+#new-project-pop-up {
+	display: flex;
+	flex-direction: row;
+	height: 100px;
+	width: 400px;
+	align-items: end;
+	justify-content: space-between;
+}
+
+#new-project-pop-up input {
+	flex: auto;
+	padding: 0px 0px 0px 20px;
+	height: 100%;
+	font-weight: 600;
+	color: var(--black);
+	border: none;
+	font-size: 1.1rem;
+	background: var(--light-gray);
+	border-radius: 10px;
+}
+
+#new-project-pop-up input:focus {
+	outline: 1px solid var(--gray);
+}
+
+#new-project-pop-up button {
+	padding: 0;
+}
+
+#new-project-pop-up button:active {
+	scale: 1.1;
+}
+
 /* BLURRY BACKGROUND */
 
-#to-do-pop-up-container {
+#to-do-pop-up-container,
+#new-project-pop-up-container {
 	position: fixed;
 	overflow: hidden;
 	height: 0px;
@@ -450,7 +488,8 @@ input#to-do-date.flatpickr-input {
 		height 0.3s ease-in-out;
 }
 
-#to-do-pop-up-container.active {
+#to-do-pop-up-container.active,
+#new-project-pop-up-container.active {
 	opacity: 1;
 	visibility: visible;
 	height: 100%;
