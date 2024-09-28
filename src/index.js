@@ -20,8 +20,9 @@ const closeProjectPopUp = document.querySelector("#close-project-pop-up");
 const newProjectInput = document.querySelector("#new-project-title");
 const projectSidebarList = document.querySelector(".projects-sidebar-list");
 const mainPageTitle = document.querySelector("#project-name");
+const inboxBtn = document.querySelector("#inbox-btn");
 
-let currentProject = "Inbox";
+let currentProject = "inbox";
 const todoItems = [];
 export const userProjects = [];
 
@@ -33,6 +34,7 @@ saveNewTodoBtn.addEventListener("click", () => {
 		alert("Please enter a task name");
 	} else {
 		toDoPopUpContainer.classList.remove("active");
+
 		addTodo(getTodoValues());
 		loadTask(currentProject);
 		clearInputFields();
@@ -42,16 +44,7 @@ saveNewTodoBtn.addEventListener("click", () => {
 
 // Toggle to do pop up div
 newTodoBtn.addEventListener("click", () => {
-	// Select option for current project
-	const options = toDoProject.querySelectorAll("option");
-	for (let i = 0; i < options.length; i++) {
-		if (options[i].value === currentProject) {
-			options[i].selected = true;
-		} else {
-			options[i].selected = false;
-		}
-	}
-
+	toggleProjectInput();
 	toDoPopUpContainer.classList.add("active");
 });
 
@@ -71,19 +64,10 @@ function addTodo() {
 		toDoDescription.value,
 		toDoDueDate.value,
 		toDoPriority.value,
-		toDoProject.value
+		toDoProject.value.toLowerCase()
 	);
 
 	todoItems.push(newTodo);
-}
-
-// Create new todo pop up
-
-function updateNumberOfTasks() {
-	const numberOfTasks = document.querySelector("#to-dos-length");
-	const todoLength = todoItems.length;
-
-	numberOfTasks.textContent = `${todoLength} Tasks`;
 }
 
 // Create new project
@@ -98,7 +82,7 @@ saveNewProjectBtn.addEventListener("click", () => {
 		alert("Please enter a project name");
 	} else {
 		newProjectPopUp.classList.remove("active");
-		userProjects.push(projectName);
+		createProject(projectName);
 
 		// Create the option for new todo
 		const option = document.createElement("option");
@@ -115,6 +99,13 @@ saveNewProjectBtn.addEventListener("click", () => {
 closeProjectPopUp.addEventListener("click", () => {
 	newProjectInput.value = "";
 	newProjectPopUp.classList.remove("active");
+});
+
+// inbox btn event listener
+inboxBtn.addEventListener("click", () => {
+	currentProject = "inbox";
+	loadMainPage("inbox");
+	toggleProjectInput();
 });
 
 function loadProjects() {
@@ -139,6 +130,7 @@ function loadProjects() {
 		button.addEventListener("click", () => {
 			currentProject = userProjects[i];
 			loadMainPage(currentProject);
+			toggleProjectInput();
 		});
 
 		projectItem.appendChild(button);
@@ -147,10 +139,11 @@ function loadProjects() {
 }
 
 function loadMainPage(project) {
-	mainPageTitle.textContent = project;
-	updateNumberOfTasks();
+	mainPageTitle.textContent =
+		project.charAt(0).toUpperCase() + project.slice(1);
 
 	loadTask(project);
+	updateNumberOfTasks();
 }
 
 // Load tasks
@@ -158,8 +151,8 @@ function loadMainPage(project) {
 function loadTask(project) {
 	toDoList.innerHTML = "";
 
-	if (project == "Inbox") {
-		todoItems.forEach((item, i) => {
+	todoItems.forEach((item, i) => {
+		if (item.project == project || project == "inbox") {
 			const toDoItem = document.createElement("li");
 			toDoItem.classList.add("to-do-item");
 
@@ -199,8 +192,31 @@ function loadTask(project) {
 			toDoItem.appendChild(priorityBtn);
 
 			toDoList.appendChild(toDoItem);
-		});
+		}
+	});
+}
+
+function toggleProjectInput() {
+	// Select option for current project
+	const options = toDoProject.querySelectorAll("option");
+	for (let i = 0; i < options.length; i++) {
+		if (options[i].value === currentProject) {
+			options[i].selected = true;
+		} else {
+			options[i].selected = false;
+		}
 	}
+}
+
+// Create new todo pop up
+
+function updateNumberOfTasks() {
+	const numberOfTasks = document.querySelector("#to-dos-length");
+	let projectTasks = todoItems.filter(
+		(todo) => todo.project == currentProject || currentProject == "inbox"
+	);
+
+	numberOfTasks.textContent = `${[projectTasks.length]} Tasks`;
 }
 
 function getTodoValues() {
