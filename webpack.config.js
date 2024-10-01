@@ -11,6 +11,7 @@ module.exports = {
 		clean: true,
 	},
 	devtool: "eval-source-map",
+	devtool: "source-map",
 	devServer: {
 		watchFiles: ["./src/template.html"],
 	},

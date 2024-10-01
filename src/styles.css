@@ -468,6 +468,16 @@ input#to-do-date.flatpickr-input {
 	scale: 1.1;
 }
 
+.project-btn {
+	position: relative;
+}
+
+.delete-project-btn {
+	position: absolute;
+	right: 10px;
+	background: red;
+}
+
 /* BLURRY BACKGROUND */
 
 #to-do-pop-up-container,

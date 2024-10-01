@@ -84,17 +84,32 @@ saveNewProjectBtn.addEventListener("click", () => {
 		newProjectPopUp.classList.remove("active");
 		createProject(projectName);
 
-		// Create the option for new todo
-		const option = document.createElement("option");
-		option.value = projectName;
-		option.textContent = projectName;
-		toDoProject.appendChild(option);
-
 		// Update sidebar projects
 		loadProjects();
 		newProjectInput.value = "";
 	}
 });
+
+function loadProjectOptions() {
+	toDoProject.innerHTML = "";
+
+	// Create inbox option
+	const option = document.createElement("option");
+	option.value = "inbox";
+	option.textContent = "Inbox";
+	toDoProject.appendChild(option);
+
+	// Create projects option
+	userProjects.forEach((project) => {
+		const option = document.createElement("option");
+		option.value = project;
+		option.textContent = project;
+		toDoProject.appendChild(option);
+
+		console.log(option);
+	});
+	console.log(toDoProject);
+}
 
 closeProjectPopUp.addEventListener("click", () => {
 	newProjectInput.value = "";
@@ -112,30 +127,54 @@ function loadProjects() {
 	projectSidebarList.innerHTML = "";
 
 	for (let i = 0; i < userProjects.length; i++) {
+		// Create project item
 		const projectItem = document.createElement("li");
 
-		const button = document.createElement("button");
-		button.type = "button";
-		button.className = "project-btn";
+		const projectBtn = document.createElement("button");
+		projectBtn.type = "button";
+		projectBtn.className = "project-btn";
 
-		const icon = document.createElement("i");
-		icon.className = "material-symbols-rounded icon";
-		icon.textContent = "stat_0";
-		button.appendChild(icon);
-
-		const span = document.createElement("span");
-		span.textContent = userProjects[i];
-		button.appendChild(span);
-
-		button.addEventListener("click", () => {
+		projectBtn.addEventListener("click", () => {
 			currentProject = userProjects[i];
 			loadMainPage(currentProject);
 			toggleProjectInput();
 		});
 
-		projectItem.appendChild(button);
+		// Create icon
+		const icon = document.createElement("i");
+		icon.className = "material-symbols-rounded icon";
+		icon.textContent = "stat_0";
+		projectBtn.appendChild(icon);
+
+		const span = document.createElement("span");
+		span.textContent = userProjects[i];
+		projectBtn.appendChild(span);
+
+		// Create delete and project name
+		const deleteBtn = document.createElement("button");
+		deleteBtn.type = "button";
+		deleteBtn.className = "delete-project-btn";
+		deleteBtn.textContent = "x";
+
+		deleteBtn.addEventListener("click", (e) => {
+			const indexOfWord = userProjects.indexOf(userProjects[i]);
+			if (indexOfWord !== -1) {
+				userProjects.splice(indexOfWord, 1);
+			}
+
+			currentProject = "inbox";
+			loadMainPage("inbox");
+			toggleProjectInput();
+			loadProjects();
+			e.stopPropagation();
+		});
+
+		projectBtn.appendChild(deleteBtn);
+		projectItem.appendChild(projectBtn);
 		projectSidebarList.appendChild(projectItem);
 	}
+
+	loadProjectOptions();
 }
 
 function loadMainPage(project) {
