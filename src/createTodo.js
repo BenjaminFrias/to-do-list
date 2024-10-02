@@ -3,7 +3,7 @@ export function createTodoFactory(
 	description = "",
 	dueDate = "No due date",
 	priority = "Low",
-	project = "inbox"
+	project = ""
 ) {
 	return {
 		title,

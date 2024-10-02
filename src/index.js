@@ -90,27 +90,6 @@ saveNewProjectBtn.addEventListener("click", () => {
 	}
 });
 
-function loadProjectOptions() {
-	toDoProject.innerHTML = "";
-
-	// Create inbox option
-	const option = document.createElement("option");
-	option.value = "inbox";
-	option.textContent = "Inbox";
-	toDoProject.appendChild(option);
-
-	// Create projects option
-	userProjects.forEach((project) => {
-		const option = document.createElement("option");
-		option.value = project;
-		option.textContent = project;
-		toDoProject.appendChild(option);
-
-		console.log(option);
-	});
-	console.log(toDoProject);
-}
-
 closeProjectPopUp.addEventListener("click", () => {
 	newProjectInput.value = "";
 	newProjectPopUp.classList.remove("active");
@@ -154,19 +133,29 @@ function loadProjects() {
 		const deleteBtn = document.createElement("button");
 		deleteBtn.type = "button";
 		deleteBtn.className = "delete-project-btn";
-		deleteBtn.textContent = "x";
+
+		const deleteIcon = document.createElement("i");
+		deleteIcon.className = "material-symbols-rounded icon";
+		deleteIcon.textContent = "delete";
+		deleteBtn.appendChild(deleteIcon);
 
 		deleteBtn.addEventListener("click", (e) => {
-			const indexOfWord = userProjects.indexOf(userProjects[i]);
-			if (indexOfWord !== -1) {
-				userProjects.splice(indexOfWord, 1);
-			}
+			const confirmation = confirm(
+				"Are you sure you want to delete this?"
+			);
 
-			currentProject = "inbox";
-			loadMainPage("inbox");
-			toggleProjectInput();
-			loadProjects();
-			e.stopPropagation();
+			if (confirmation) {
+				const indexOfWord = userProjects.indexOf(userProjects[i]);
+				if (indexOfWord !== -1) {
+					userProjects.splice(indexOfWord, 1);
+				}
+
+				currentProject = "inbox";
+				loadMainPage("inbox");
+				toggleProjectInput();
+				loadProjects();
+				e.stopPropagation();
+			}
 		});
 
 		projectBtn.appendChild(deleteBtn);
@@ -185,13 +174,43 @@ function loadMainPage(project) {
 	updateNumberOfTasks();
 }
 
+function loadProjectOptions() {
+	toDoProject.innerHTML = "";
+
+	// Create inbox option
+	const option = document.createElement("option");
+	option.value = "inbox";
+	option.textContent = "Inbox";
+	toDoProject.appendChild(option);
+
+	// Create projects option
+	userProjects.forEach((project) => {
+		const option = document.createElement("option");
+		option.value = project;
+		option.textContent = project;
+		toDoProject.appendChild(option);
+	});
+}
+
 // Load tasks
 
 function loadTask(project) {
 	toDoList.innerHTML = "";
 
 	todoItems.forEach((item, i) => {
-		if (item.project == project || project == "inbox") {
+		const shouldDisplay = item.project == project || project == "inbox";
+
+		if (
+			!isValidProject(item.project, userProjects) &&
+			item.project != "inbox"
+		) {
+			todoItems.splice(i, 1);
+			updateNumberOfTasks();
+			return;
+		}
+
+		// Create todo items if is the same project or inbox
+		if (shouldDisplay) {
 			const toDoItem = document.createElement("li");
 			toDoItem.classList.add("to-do-item");
 
@@ -209,9 +228,9 @@ function loadTask(project) {
 				}, 300);
 			});
 
-			const toDoTitle = document.createElement("p");
-			toDoTitle.classList.add("to-do-title");
-			toDoTitle.textContent = item.title;
+			const toDoTitleText = document.createElement("p");
+			toDoTitleText.classList.add("to-do-title");
+			toDoTitleText.textContent = item.title;
 
 			const priorityBtn = document.createElement("button");
 			priorityBtn.classList.add("to-do-priority");
@@ -227,12 +246,25 @@ function loadTask(project) {
 			priorityBtn.appendChild(icon);
 
 			toDoItem.appendChild(completeInput);
-			toDoItem.appendChild(toDoTitle);
+			toDoItem.appendChild(toDoTitleText);
 			toDoItem.appendChild(priorityBtn);
 
 			toDoList.appendChild(toDoItem);
+
+			// Edit todos
+			toDoItem.addEventListener("click", (e) => {
+				if (e.target == toDoItem || e.target == toDoTitleText) {
+					toDoPopUpContainer.classList.add("active");
+					toDoTitle.value = item.title;
+				}
+			});
 		}
 	});
+}
+
+function isValidProject(project, validProjects) {
+	const projectSet = new Set(validProjects);
+	return projectSet.has(project);
 }
 
 function toggleProjectInput() {

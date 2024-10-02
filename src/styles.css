@@ -475,7 +475,7 @@ input#to-do-date.flatpickr-input {
 .delete-project-btn {
 	position: absolute;
 	right: 10px;
-	background: red;
+	top: 10%;
 }
 
 /* BLURRY BACKGROUND */
