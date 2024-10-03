@@ -5,8 +5,9 @@ import { createProject } from "./createProject";
 
 const newTodoBtn = document.querySelector("#new-to-do-btn");
 const toDoPopUpContainer = document.querySelector("#to-do-pop-up-container");
+const toDoPopUp = document.querySelector("#to-do-pop-up");
 const closePopUpBtn = document.querySelector("#close-pop-up");
-const saveNewTodoBtn = document.querySelector("#save-to-do");
+// const saveNewTodoBtn = document.querySelector("#save-to-do");
 const toDoTitle = document.querySelector("#to-do-title");
 const toDoDescription = document.querySelector("#to-do-description");
 const toDoProject = document.querySelector("#to-do-project");
@@ -29,27 +30,47 @@ export const userProjects = [];
 loadMainPage(currentProject);
 
 // Save new todo button
-saveNewTodoBtn.addEventListener("click", () => {
-	if (toDoTitle.value.trim() == "") {
-		alert("Please enter a task name");
-	} else {
-		toDoPopUpContainer.classList.remove("active");
-
-		addTodo(getTodoValues());
-		loadTask(currentProject);
-		clearInputFields();
-		updateNumberOfTasks();
-	}
-});
 
 // Toggle to do pop up div
 newTodoBtn.addEventListener("click", () => {
 	toggleProjectInput();
+
+	// Create save button
+	const saveBtn = document.querySelector("#save-to-do");
+	if (saveBtn) {
+		toDoPopUp.removeChild(saveBtn);
+	}
+
+	const saveNewTodoBtn = document.createElement("button");
+	saveNewTodoBtn.textContent = "Save task";
+	saveNewTodoBtn.id = "save-to-do";
+	toDoPopUp.appendChild(saveNewTodoBtn);
+
+	saveNewTodoBtn.addEventListener("click", () => {
+		if (toDoTitle.value.trim() == "") {
+			alert("Please enter a task name");
+		} else {
+			toDoPopUpContainer.classList.remove("active");
+
+			addTodo(getTodoValues());
+			loadTask(currentProject);
+			clearInputFields();
+			updateNumberOfTasks();
+			toDoPopUp.removeChild(saveNewTodoBtn);
+		}
+	});
+
+	// Show pop up
 	toDoPopUpContainer.classList.add("active");
 });
 
 // Close pop up
 closePopUpBtn.addEventListener("click", () => {
+	const saveBtn = document.querySelector("#save-to-do");
+	if (saveBtn) {
+		toDoPopUp.removeChild(saveBtn);
+	}
+	clearInputFields();
 	toDoPopUpContainer.classList.remove("active");
 });
 
@@ -253,9 +274,72 @@ function loadTask(project) {
 
 			// Edit todos
 			toDoItem.addEventListener("click", (e) => {
-				if (e.target == toDoItem || e.target == toDoTitleText) {
+				if (
+					e.target.classList.contains("to-do-title") ||
+					e.target.classList.contains("to-do-item")
+				) {
+					// Paste values into pop up
 					toDoPopUpContainer.classList.add("active");
 					toDoTitle.value = item.title;
+					toDoDescription.value = item.description;
+
+					if (project != "inbox") {
+						const projectIndex = userProjects.indexOf(item.project);
+						toDoProject.selectedIndex = projectIndex + 1;
+					} else {
+						toDoProject.selectedIndex = 0;
+					}
+
+					toDoDueDate.value = item.dueDate;
+
+					const priorityIndex = [
+						"none",
+						"low",
+						"medium",
+						"high",
+					].indexOf(item.priority);
+
+					toDoPriority.selectedIndex = priorityIndex;
+
+					// Create save edited todo button
+					const saveEditedBtn =
+						document.querySelector("#save-edited-btn");
+					if (saveEditedBtn) {
+						toDoPopUp.removeChild(saveEditedBtn);
+					}
+
+					const saveEditedTaskBtn = document.createElement("button");
+					saveEditedTaskBtn.textContent = "Save task";
+					saveEditedTaskBtn.id = "save-edited-btn";
+					toDoPopUp.appendChild(saveEditedTaskBtn);
+
+					saveEditedTaskBtn.addEventListener("click", () => {
+						if (toDoTitle.value.trim() == "") {
+							alert("Please enter a task name");
+						} else {
+							toDoPopUpContainer.classList.remove("active");
+
+							// Set new values for task item
+							const [
+								title,
+								description,
+								date,
+								priority,
+								project,
+							] = getTodoValues();
+
+							item.title = title;
+							item.description = description;
+							item.dueDate = date;
+							item.priority = priority;
+							item.project = project.toLowerCase();
+
+							loadTask(currentProject);
+							clearInputFields();
+							updateNumberOfTasks();
+							toDoPopUp.removeChild(saveEditedTaskBtn);
+						}
+					});
 				}
 			});
 		}
