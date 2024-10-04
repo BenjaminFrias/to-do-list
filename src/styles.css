@@ -433,6 +433,22 @@ input#to-do-date.flatpickr-input {
 	border-radius: 10px;
 }
 
+#buttons-container {
+	width: 100%;
+	display: flex;
+	gap: 10px;
+	justify-content: space-between;
+}
+
+#buttons-container button {
+	flex: 1;
+}
+
+#buttons-container button#delete-to-do-btn {
+	background: var(--High-priority);
+	color: white;
+}
+
 /* NEW PROJECT POP UP */
 
 #new-project-pop-up {

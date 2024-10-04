@@ -41,6 +41,11 @@ newTodoBtn.addEventListener("click", () => {
 		toDoPopUp.removeChild(saveBtn);
 	}
 
+	const editedBtnsContainer = document.querySelector("#buttons-container");
+	if (editedBtnsContainer) {
+		toDoPopUp.removeChild(editedBtnsContainer);
+	}
+
 	const saveNewTodoBtn = document.createElement("button");
 	saveNewTodoBtn.textContent = "Save task";
 	saveNewTodoBtn.id = "save-to-do";
@@ -302,16 +307,43 @@ function loadTask(project) {
 					toDoPriority.selectedIndex = priorityIndex;
 
 					// Create save edited todo button
-					const saveEditedBtn =
-						document.querySelector("#save-edited-btn");
-					if (saveEditedBtn) {
-						toDoPopUp.removeChild(saveEditedBtn);
+					const buttonsContainer = document.createElement("div");
+					buttonsContainer.id = "buttons-container";
+					toDoPopUp.appendChild(buttonsContainer);
+
+					const checkBtnsContainer =
+						document.querySelector("#buttons-container");
+					if (checkBtnsContainer) {
+						toDoPopUp.removeChild(checkBtnsContainer);
 					}
 
 					const saveEditedTaskBtn = document.createElement("button");
 					saveEditedTaskBtn.textContent = "Save task";
 					saveEditedTaskBtn.id = "save-edited-btn";
-					toDoPopUp.appendChild(saveEditedTaskBtn);
+					buttonsContainer.appendChild(saveEditedTaskBtn);
+					toDoPopUp.appendChild(buttonsContainer);
+
+					// Create delete to do button
+					const deleteToDoBtn = document.createElement("button");
+					deleteToDoBtn.id = "delete-to-do-btn";
+					deleteToDoBtn.textContent = "Delete";
+					buttonsContainer.appendChild(deleteToDoBtn);
+
+					deleteToDoBtn.addEventListener("click", () => {
+						const confirmation = confirm(
+							"Are you sure you want to delete this?"
+						);
+
+						if (confirmation) {
+							todoItems.splice(i, 1);
+							toDoList.removeChild(toDoItem);
+							updateNumberOfTasks();
+
+							toDoPopUpContainer.classList.remove("active");
+							toDoPopUp.removeChild(buttonsContainer);
+							clearInputFields();
+						}
+					});
 
 					saveEditedTaskBtn.addEventListener("click", () => {
 						if (toDoTitle.value.trim() == "") {
@@ -337,7 +369,7 @@ function loadTask(project) {
 							loadTask(currentProject);
 							clearInputFields();
 							updateNumberOfTasks();
-							toDoPopUp.removeChild(saveEditedTaskBtn);
+							toDoPopUp.removeChild(buttonsContainer);
 						}
 					});
 				}
