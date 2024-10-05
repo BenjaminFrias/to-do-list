@@ -2,6 +2,7 @@ import "./styles.css";
 import "./reset.css";
 import { createTodoFactory } from "./createTodo";
 import { createProject } from "./createProject";
+import { startOfDay, endOfDay } from "date-fns";
 
 const newTodoBtn = document.querySelector("#new-to-do-btn");
 const toDoPopUpContainer = document.querySelector("#to-do-pop-up-container");
@@ -22,6 +23,8 @@ const newProjectInput = document.querySelector("#new-project-title");
 const projectSidebarList = document.querySelector(".projects-sidebar-list");
 const mainPageTitle = document.querySelector("#project-name");
 const inboxBtn = document.querySelector("#inbox-btn");
+const todayBtn = document.querySelector("#today-btn");
+const upcomingBtn = document.querySelector("#upcoming-btn");
 
 let currentProject = "inbox";
 const todoItems = [];
@@ -223,158 +226,168 @@ function loadProjectOptions() {
 function loadTask(project) {
 	toDoList.innerHTML = "";
 
+	// Delete to do's if theirs project is deleted
 	todoItems.forEach((item, i) => {
-		const shouldDisplay = item.project == project || project == "inbox";
-
 		if (
 			!isValidProject(item.project, userProjects) &&
 			item.project != "inbox"
 		) {
 			todoItems.splice(i, 1);
 			updateNumberOfTasks();
-			return;
 		}
+	});
 
-		// Create todo items if is the same project or inbox
-		if (shouldDisplay) {
-			const toDoItem = document.createElement("li");
-			toDoItem.classList.add("to-do-item");
+	const filteredTodoItems = todoItems.filter((todo) => {
+		if (project === "inbox") {
+			return true;
+		} else if (project === "today") {
+			const today = new Date();
 
-			const completeInput = document.createElement("input");
-			completeInput.type = "checkbox";
-			completeInput.name = "to-do-complete";
+			if (!todo.dueDate) {
+				return false; // Exclude todos without dates
+			}
+			const [year, month, day] = todo.dueDate.split("-");
+			const todoDate = new Date(year, month - 1, day);
 
-			completeInput.addEventListener("click", () => {
-				toDoItem.classList.add("completed");
+			const startOfDayToday = startOfDay(today);
+			const endOfDayToday = endOfDay(today);
 
-				setTimeout(() => {
-					todoItems.splice(i, 1);
-					toDoList.removeChild(toDoItem);
-					updateNumberOfTasks();
-				}, 300);
-			});
+			const isForToday =
+				todoDate >= startOfDayToday && todoDate <= endOfDayToday;
 
-			const toDoTitleText = document.createElement("p");
-			toDoTitleText.classList.add("to-do-title");
-			toDoTitleText.textContent = item.title;
+			return isForToday;
+		} else {
+			return todo.project === project; // Filter items based on the specified project
+		}
+	});
 
-			const priorityBtn = document.createElement("button");
-			priorityBtn.classList.add("to-do-priority");
+	filteredTodoItems.forEach((item, i) => {
+		const toDoItem = document.createElement("li");
+		toDoItem.classList.add("to-do-item");
 
-			const icon = document.createElement("i");
-			icon.classList.add(
-				"material-symbols-rounded",
-				"icon",
-				item.priority
-			);
-			icon.textContent = "radio_button_checked";
+		const completeInput = document.createElement("input");
+		completeInput.type = "checkbox";
+		completeInput.name = "to-do-complete";
 
-			priorityBtn.appendChild(icon);
+		completeInput.addEventListener("click", () => {
+			toDoItem.classList.add("completed");
 
-			toDoItem.appendChild(completeInput);
-			toDoItem.appendChild(toDoTitleText);
-			toDoItem.appendChild(priorityBtn);
+			setTimeout(() => {
+				todoItems.splice(i, 1);
+				toDoList.removeChild(toDoItem);
+				updateNumberOfTasks();
+			}, 300);
+		});
 
-			toDoList.appendChild(toDoItem);
+		const toDoTitleText = document.createElement("p");
+		toDoTitleText.classList.add("to-do-title");
+		toDoTitleText.textContent = item.title;
 
-			// Edit todos
-			toDoItem.addEventListener("click", (e) => {
-				if (
-					e.target.classList.contains("to-do-title") ||
-					e.target.classList.contains("to-do-item")
-				) {
-					// Paste values into pop up
-					toDoPopUpContainer.classList.add("active");
-					toDoTitle.value = item.title;
-					toDoDescription.value = item.description;
+		const priorityBtn = document.createElement("button");
+		priorityBtn.classList.add("to-do-priority");
 
-					if (project != "inbox") {
-						const projectIndex = userProjects.indexOf(item.project);
-						toDoProject.selectedIndex = projectIndex + 1;
-					} else {
-						toDoProject.selectedIndex = 0;
-					}
+		const icon = document.createElement("i");
+		icon.classList.add("material-symbols-rounded", "icon", item.priority);
+		icon.textContent = "radio_button_checked";
 
-					toDoDueDate.value = item.dueDate;
+		priorityBtn.appendChild(icon);
 
-					const priorityIndex = [
-						"none",
-						"low",
-						"medium",
-						"high",
-					].indexOf(item.priority);
+		toDoItem.appendChild(completeInput);
+		toDoItem.appendChild(toDoTitleText);
+		toDoItem.appendChild(priorityBtn);
 
-					toDoPriority.selectedIndex = priorityIndex;
+		toDoList.appendChild(toDoItem);
 
-					// Create save edited todo button
-					const buttonsContainer = document.createElement("div");
-					buttonsContainer.id = "buttons-container";
-					toDoPopUp.appendChild(buttonsContainer);
+		// Edit todos
+		toDoItem.addEventListener("click", (e) => {
+			if (
+				e.target.classList.contains("to-do-title") ||
+				e.target.classList.contains("to-do-item")
+			) {
+				// Paste values into pop up
+				toDoPopUpContainer.classList.add("active");
+				toDoTitle.value = item.title;
+				toDoDescription.value = item.description;
 
-					const checkBtnsContainer =
-						document.querySelector("#buttons-container");
-					if (checkBtnsContainer) {
-						toDoPopUp.removeChild(checkBtnsContainer);
-					}
-
-					const saveEditedTaskBtn = document.createElement("button");
-					saveEditedTaskBtn.textContent = "Save task";
-					saveEditedTaskBtn.id = "save-edited-btn";
-					buttonsContainer.appendChild(saveEditedTaskBtn);
-					toDoPopUp.appendChild(buttonsContainer);
-
-					// Create delete to do button
-					const deleteToDoBtn = document.createElement("button");
-					deleteToDoBtn.id = "delete-to-do-btn";
-					deleteToDoBtn.textContent = "Delete";
-					buttonsContainer.appendChild(deleteToDoBtn);
-
-					deleteToDoBtn.addEventListener("click", () => {
-						const confirmation = confirm(
-							"Are you sure you want to delete this?"
-						);
-
-						if (confirmation) {
-							todoItems.splice(i, 1);
-							toDoList.removeChild(toDoItem);
-							updateNumberOfTasks();
-
-							toDoPopUpContainer.classList.remove("active");
-							toDoPopUp.removeChild(buttonsContainer);
-							clearInputFields();
-						}
-					});
-
-					saveEditedTaskBtn.addEventListener("click", () => {
-						if (toDoTitle.value.trim() == "") {
-							alert("Please enter a task name");
-						} else {
-							toDoPopUpContainer.classList.remove("active");
-
-							// Set new values for task item
-							const [
-								title,
-								description,
-								date,
-								priority,
-								project,
-							] = getTodoValues();
-
-							item.title = title;
-							item.description = description;
-							item.dueDate = date;
-							item.priority = priority;
-							item.project = project.toLowerCase();
-
-							loadTask(currentProject);
-							clearInputFields();
-							updateNumberOfTasks();
-							toDoPopUp.removeChild(buttonsContainer);
-						}
-					});
+				if (project != "inbox") {
+					const projectIndex = userProjects.indexOf(item.project);
+					toDoProject.selectedIndex = projectIndex + 1;
+				} else {
+					toDoProject.selectedIndex = 0;
 				}
-			});
-		}
+
+				toDoDueDate.value = item.dueDate;
+
+				const priorityIndex = ["none", "low", "medium", "high"].indexOf(
+					item.priority
+				);
+
+				toDoPriority.selectedIndex = priorityIndex;
+
+				// Create save edited todo button
+				const buttonsContainer = document.createElement("div");
+				buttonsContainer.id = "buttons-container";
+				toDoPopUp.appendChild(buttonsContainer);
+
+				const checkBtnsContainer =
+					document.querySelector("#buttons-container");
+				if (checkBtnsContainer) {
+					toDoPopUp.removeChild(checkBtnsContainer);
+				}
+
+				const saveEditedTaskBtn = document.createElement("button");
+				saveEditedTaskBtn.textContent = "Save task";
+				saveEditedTaskBtn.id = "save-edited-btn";
+				buttonsContainer.appendChild(saveEditedTaskBtn);
+				toDoPopUp.appendChild(buttonsContainer);
+
+				// Create delete to do button
+				const deleteToDoBtn = document.createElement("button");
+				deleteToDoBtn.id = "delete-to-do-btn";
+				deleteToDoBtn.textContent = "Delete";
+				buttonsContainer.appendChild(deleteToDoBtn);
+
+				deleteToDoBtn.addEventListener("click", () => {
+					const confirmation = confirm(
+						"Are you sure you want to delete this?"
+					);
+
+					if (confirmation) {
+						todoItems.splice(i, 1);
+						toDoList.removeChild(toDoItem);
+						updateNumberOfTasks();
+
+						toDoPopUpContainer.classList.remove("active");
+						toDoPopUp.removeChild(buttonsContainer);
+						clearInputFields();
+					}
+				});
+
+				saveEditedTaskBtn.addEventListener("click", () => {
+					if (toDoTitle.value.trim() == "") {
+						alert("Please enter a task name");
+					} else {
+						toDoPopUpContainer.classList.remove("active");
+
+						// Set new values for task item
+						const [title, description, date, priority, project] =
+							getTodoValues();
+
+						item.title = title;
+						item.description = description;
+						item.dueDate = date;
+						item.priority = priority;
+						item.project = project.toLowerCase();
+
+						loadTask(currentProject);
+						clearInputFields();
+						updateNumberOfTasks();
+						toDoPopUp.removeChild(buttonsContainer);
+					}
+				});
+			}
+		});
+		// }
 	});
 }
 
@@ -394,6 +407,12 @@ function toggleProjectInput() {
 		}
 	}
 }
+
+// Today section
+
+todayBtn.addEventListener("click", () => {
+	loadMainPage("today");
+});
 
 // Create new todo pop up
 
