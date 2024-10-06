@@ -63,7 +63,6 @@ newTodoBtn.addEventListener("click", () => {
 			addTodo(getTodoValues());
 			loadTask(currentProject);
 			clearInputFields();
-			updateNumberOfTasks();
 			toDoPopUp.removeChild(saveNewTodoBtn);
 		}
 	});
@@ -114,6 +113,8 @@ saveNewProjectBtn.addEventListener("click", () => {
 		createProject(projectName);
 
 		// Update sidebar projects
+
+		currentProject = projectName;
 		loadProjects();
 		newProjectInput.value = "";
 	}
@@ -200,7 +201,6 @@ function loadMainPage(project) {
 		project.charAt(0).toUpperCase() + project.slice(1);
 
 	loadTask(project);
-	updateNumberOfTasks();
 }
 
 function loadProjectOptions() {
@@ -226,17 +226,6 @@ function loadProjectOptions() {
 function loadTask(project) {
 	toDoList.innerHTML = "";
 
-	// Delete to do's if theirs project is deleted
-	todoItems.forEach((item, i) => {
-		if (
-			!isValidProject(item.project, userProjects) &&
-			item.project != "inbox"
-		) {
-			todoItems.splice(i, 1);
-			updateNumberOfTasks();
-		}
-	});
-
 	const filteredTodoItems = todoItems.filter((todo) => {
 		if (project === "inbox") {
 			return true;
@@ -261,6 +250,19 @@ function loadTask(project) {
 		}
 	});
 
+	// Delete to do's if theirs project is deleted
+	todoItems.forEach((item, i) => {
+		if (
+			!isValidProject(item.project, userProjects) &&
+			item.project != "inbox"
+		) {
+			todoItems.splice(i, 1);
+			updateNumberOfTasks(filteredTodoItems.length);
+		}
+	});
+
+	updateNumberOfTasks(filteredTodoItems ? filteredTodoItems.length : 23);
+
 	filteredTodoItems.forEach((item, i) => {
 		const toDoItem = document.createElement("li");
 		toDoItem.classList.add("to-do-item");
@@ -275,7 +277,9 @@ function loadTask(project) {
 			setTimeout(() => {
 				todoItems.splice(i, 1);
 				toDoList.removeChild(toDoItem);
-				updateNumberOfTasks();
+
+				const toDosLength = document.querySelectorAll(".to-do-item");
+				updateNumberOfTasks(toDosLength.length);
 			}, 300);
 		});
 
@@ -355,7 +359,9 @@ function loadTask(project) {
 					if (confirmation) {
 						todoItems.splice(i, 1);
 						toDoList.removeChild(toDoItem);
-						updateNumberOfTasks();
+						const toDosLength =
+							document.querySelectorAll(".to-do-item");
+						updateNumberOfTasks(toDosLength.length);
 
 						toDoPopUpContainer.classList.remove("active");
 						toDoPopUp.removeChild(buttonsContainer);
@@ -381,7 +387,6 @@ function loadTask(project) {
 
 						loadTask(currentProject);
 						clearInputFields();
-						updateNumberOfTasks();
 						toDoPopUp.removeChild(buttonsContainer);
 					}
 				});
@@ -411,18 +416,15 @@ function toggleProjectInput() {
 // Today section
 
 todayBtn.addEventListener("click", () => {
-	loadMainPage("today");
+	currentProject = "today";
+	loadMainPage(currentProject);
 });
 
 // Create new todo pop up
 
-function updateNumberOfTasks() {
+function updateNumberOfTasks(length) {
 	const numberOfTasks = document.querySelector("#to-dos-length");
-	let projectTasks = todoItems.filter(
-		(todo) => todo.project == currentProject || currentProject == "inbox"
-	);
-
-	numberOfTasks.textContent = `${[projectTasks.length]} Tasks`;
+	numberOfTasks.textContent = `${length} Tasks`;
 }
 
 function getTodoValues() {
