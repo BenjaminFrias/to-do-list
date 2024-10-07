@@ -3,6 +3,12 @@ import "./reset.css";
 import { createTodoFactory } from "./createTodo";
 import { createProject } from "./createProject";
 import { startOfDay, endOfDay } from "date-fns";
+import {
+	getTodosFromLocalStorage,
+	saveTodosToLocalStorage,
+	getProjectsFromLocalStorage,
+	saveProjectsToLocalStorage,
+} from "./localStorage";
 
 const newTodoBtn = document.querySelector("#new-to-do-btn");
 const toDoPopUpContainer = document.querySelector("#to-do-pop-up-container");
@@ -27,8 +33,9 @@ const todayBtn = document.querySelector("#today-btn");
 const upcomingBtn = document.querySelector("#upcoming-btn");
 
 let currentProject = "inbox";
-const todoItems = [];
-export const userProjects = [];
+const todoItems = getTodosFromLocalStorage();
+
+export const userProjects = getProjectsFromLocalStorage();
 
 loadMainPage(currentProject);
 
@@ -135,6 +142,8 @@ inboxBtn.addEventListener("click", () => {
 function loadProjects() {
 	projectSidebarList.innerHTML = "";
 
+	saveProjectsToLocalStorage(userProjects);
+
 	for (let i = 0; i < userProjects.length; i++) {
 		// Create project item
 		const projectItem = document.createElement("li");
@@ -201,6 +210,7 @@ function loadMainPage(project) {
 		project.charAt(0).toUpperCase() + project.slice(1);
 
 	loadTask(project);
+	loadProjects();
 }
 
 function loadProjectOptions() {
@@ -245,6 +255,20 @@ function loadTask(project) {
 				todoDate >= startOfDayToday && todoDate <= endOfDayToday;
 
 			return isForToday;
+		} else if (project === "upcoming") {
+			const today = new Date();
+
+			if (!todo.dueDate) {
+				return false;
+			}
+			const [year, month, day] = todo.dueDate.split("-");
+			const todoDate = new Date(year, month - 1, day);
+
+			const startOfDayToday = startOfDay(today);
+
+			const isForUpcoming = todoDate > startOfDayToday;
+
+			return isForUpcoming;
 		} else {
 			return todo.project === project; // Filter items based on the specified project
 		}
@@ -279,6 +303,7 @@ function loadTask(project) {
 				toDoList.removeChild(toDoItem);
 
 				const toDosLength = document.querySelectorAll(".to-do-item");
+				loadTask(currentProject);
 				updateNumberOfTasks(toDosLength.length);
 			}, 300);
 		});
@@ -366,6 +391,7 @@ function loadTask(project) {
 						toDoPopUpContainer.classList.remove("active");
 						toDoPopUp.removeChild(buttonsContainer);
 						clearInputFields();
+						loadTask(currentProject);
 					}
 				});
 
@@ -392,8 +418,9 @@ function loadTask(project) {
 				});
 			}
 		});
-		// }
 	});
+
+	saveTodosToLocalStorage(todoItems);
 }
 
 function isValidProject(project, validProjects) {
@@ -417,6 +444,13 @@ function toggleProjectInput() {
 
 todayBtn.addEventListener("click", () => {
 	currentProject = "today";
+	loadMainPage(currentProject);
+});
+
+// Today section
+
+upcomingBtn.addEventListener("click", () => {
+	currentProject = "upcoming";
 	loadMainPage(currentProject);
 });
 
