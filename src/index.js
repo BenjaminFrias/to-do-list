@@ -139,6 +139,20 @@ inboxBtn.addEventListener("click", () => {
 	toggleProjectInput();
 });
 
+// Today section
+
+todayBtn.addEventListener("click", () => {
+	currentProject = "today";
+	loadMainPage(currentProject);
+});
+
+// Today section
+
+upcomingBtn.addEventListener("click", () => {
+	currentProject = "upcoming";
+	loadMainPage(currentProject);
+});
+
 function loadProjects() {
 	projectSidebarList.innerHTML = "";
 
@@ -193,6 +207,7 @@ function loadProjects() {
 				loadMainPage("inbox");
 				toggleProjectInput();
 				loadProjects();
+				loadTask(currentProject);
 				e.stopPropagation();
 			}
 		});
@@ -240,35 +255,9 @@ function loadTask(project) {
 		if (project === "inbox") {
 			return true;
 		} else if (project === "today") {
-			const today = new Date();
-
-			if (!todo.dueDate) {
-				return false; // Exclude todos without dates
-			}
-			const [year, month, day] = todo.dueDate.split("-");
-			const todoDate = new Date(year, month - 1, day);
-
-			const startOfDayToday = startOfDay(today);
-			const endOfDayToday = endOfDay(today);
-
-			const isForToday =
-				todoDate >= startOfDayToday && todoDate <= endOfDayToday;
-
-			return isForToday;
+			return isForToday(todo);
 		} else if (project === "upcoming") {
-			const today = new Date();
-
-			if (!todo.dueDate) {
-				return false;
-			}
-			const [year, month, day] = todo.dueDate.split("-");
-			const todoDate = new Date(year, month - 1, day);
-
-			const startOfDayToday = startOfDay(today);
-
-			const isForUpcoming = todoDate > startOfDayToday;
-
-			return isForUpcoming;
+			return isForUpcoming(todo);
 		} else {
 			return todo.project === project; // Filter items based on the specified project
 		}
@@ -291,6 +280,7 @@ function loadTask(project) {
 		const toDoItem = document.createElement("li");
 		toDoItem.classList.add("to-do-item");
 
+		// Complete checkbox
 		const completeInput = document.createElement("input");
 		completeInput.type = "checkbox";
 		completeInput.name = "to-do-complete";
@@ -308,23 +298,48 @@ function loadTask(project) {
 			}, 300);
 		});
 
+		// To do Title
 		const toDoTitleText = document.createElement("p");
 		toDoTitleText.classList.add("to-do-title");
 		toDoTitleText.textContent = item.title;
 
+		// Date text
+		const toDoDateText = document.createElement("p");
+		toDoDateText.classList.add("to-do-date-text");
+
+		if (!item.dueDate) {
+			toDoDateText.textContent = "No date";
+		} else if (isForToday(item)) {
+			toDoDateText.textContent = "Today";
+		} else {
+			const date = new Date(item.dueDate);
+			const options = { month: "short", day: "numeric" };
+			const formmatedDate = date.toLocaleDateString("en-US", options);
+
+			toDoDateText.textContent = formmatedDate;
+		}
+
+		// Priority Btn
 		const priorityBtn = document.createElement("button");
 		priorityBtn.classList.add("to-do-priority");
 
-		const icon = document.createElement("i");
-		icon.classList.add("material-symbols-rounded", "icon", item.priority);
-		icon.textContent = "radio_button_checked";
+		const priorityIcon = document.createElement("i");
+		priorityIcon.classList.add(
+			"material-symbols-rounded",
+			"icon",
+			item.priority
+		);
+		priorityIcon.textContent = "radio_button_checked";
 
-		priorityBtn.appendChild(icon);
+		priorityBtn.appendChild(priorityIcon);
 
+		// Append items to To Do
 		toDoItem.appendChild(completeInput);
 		toDoItem.appendChild(toDoTitleText);
+		toDoItem.appendChild(toDoDateText);
 		toDoItem.appendChild(priorityBtn);
 
+		// Append To do to List
 		toDoList.appendChild(toDoItem);
 
 		// Edit todos
@@ -440,25 +455,42 @@ function toggleProjectInput() {
 	}
 }
 
-// Today section
-
-todayBtn.addEventListener("click", () => {
-	currentProject = "today";
-	loadMainPage(currentProject);
-});
-
-// Today section
-
-upcomingBtn.addEventListener("click", () => {
-	currentProject = "upcoming";
-	loadMainPage(currentProject);
-});
-
-// Create new todo pop up
-
 function updateNumberOfTasks(length) {
 	const numberOfTasks = document.querySelector("#to-dos-length");
 	numberOfTasks.textContent = `${length} Tasks`;
+}
+
+function isForToday(todo) {
+	const today = new Date();
+
+	if (!todo.dueDate) {
+		return false; // Exclude todos without dates
+	}
+	const [year, month, day] = todo.dueDate.split("-");
+	const todoDate = new Date(year, month - 1, day);
+
+	const startOfDayToday = startOfDay(today);
+	const endOfDayToday = endOfDay(today);
+
+	const isForToday = todoDate >= startOfDayToday && todoDate <= endOfDayToday;
+
+	return isForToday;
+}
+
+function isForUpcoming(todo) {
+	const today = new Date();
+
+	if (!todo.dueDate) {
+		return false;
+	}
+	const [year, month, day] = todo.dueDate.split("-");
+	const todoDate = new Date(year, month - 1, day);
+
+	const startOfDayToday = startOfDay(today);
+
+	const isForUpcoming = todoDate > startOfDayToday;
+
+	return isForUpcoming;
 }
 
 function getTodoValues() {
