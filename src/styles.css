@@ -46,12 +46,45 @@ li {
 /* SIDEBAR */
 
 .sidebar {
-	flex: 1;
 	display: flex;
 	flex-direction: column;
-	gap: 50px;
-	background: var(--white);
-	padding: 25px;
+	background: var(--light-gray);
+	width: 0px;
+	padding: 15px 0px;
+	gap: 40px;
+	overflow: hidden;
+	transition: all 200ms ease;
+}
+
+.sidebar h1,
+#add-new-project-btn > * {
+	flex-shrink: 0;
+	word-break: keep-all;
+}
+
+.sidebar.open {
+	flex: 1;
+	padding: 15px 25px;
+	transition: all 200ms ease;
+}
+
+.sidebar div:nth-child(1) {
+	display: flex;
+	justify-content: space-between;
+	padding: 0;
+}
+
+#sidebar-toggle-btn {
+	display: flex;
+	position: absolute;
+	left: 220px;
+	top: 23px;
+	transition: all 200ms ease;
+}
+
+#sidebar-toggle-btn.closed {
+	left: 20px;
+	transition: all 200ms ease;
 }
 
 .sidebar h2,
@@ -142,8 +175,14 @@ button.project-btn {
 	flex-direction: column;
 	gap: 20px;
 	flex: 4;
-	padding: 25px 40px;
+	padding: 25px 80px;
 	background: var(--white);
+	transition: all 200ms ease;
+}
+
+.main-to-do-list-container.closed {
+	padding: 25px 120px;
+	transition: all 200ms ease;
 }
 
 ul#to-do-list {

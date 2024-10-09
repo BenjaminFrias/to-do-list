@@ -31,6 +31,11 @@ const mainPageTitle = document.querySelector("#project-name");
 const inboxBtn = document.querySelector("#inbox-btn");
 const todayBtn = document.querySelector("#today-btn");
 const upcomingBtn = document.querySelector("#upcoming-btn");
+const toggleSidebarBtn = document.querySelector("#sidebar-toggle-btn");
+const contentListContainer = document.querySelector(
+	".main-to-do-list-container"
+);
+const sidebar = document.querySelector(".sidebar");
 
 let currentProject = "inbox";
 const todoItems = getTodosFromLocalStorage();
@@ -151,6 +156,14 @@ todayBtn.addEventListener("click", () => {
 upcomingBtn.addEventListener("click", () => {
 	currentProject = "upcoming";
 	loadMainPage(currentProject);
+});
+
+// Toggle sidebar
+
+toggleSidebarBtn.addEventListener("click", () => {
+	sidebar.classList.toggle("open");
+	toggleSidebarBtn.classList.toggle("closed");
+	contentListContainer.classList.toggle("closed");
 });
 
 function loadProjects() {

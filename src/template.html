@@ -28,8 +28,13 @@
 	<body>
 		<div class="container">
 			<!-- SIDEBAR -->
-			<div class="sidebar">
-				<h1 class="logo">To-do list</h1>
+			<div class="sidebar open">
+				<div>
+					<h1 class="logo">To-do list</h1>
+				</div>
+				<button type="button" id="sidebar-toggle-btn">
+					<i class="material-symbols-rounded icon"> dock_to_left </i>
+				</button>
 				<ul class="default-sidebar-list">
 					<li>
 						<button
@@ -75,9 +80,6 @@
 						<span>New project</span>
 					</button>
 				</div>
-				<button type="button" id="sidebar-toggle-btn">
-					<span class="toggle-icon"><</span>
-				</button>
 			</div>
 
 			<!-- Main to-do's container -->
