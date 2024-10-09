@@ -10,11 +10,11 @@ import {
 	saveProjectsToLocalStorage,
 } from "./localStorage";
 
+const mainContainer = document.querySelector(".container");
 const newTodoBtn = document.querySelector("#new-to-do-btn");
 const toDoPopUpContainer = document.querySelector("#to-do-pop-up-container");
 const toDoPopUp = document.querySelector("#to-do-pop-up");
 const closePopUpBtn = document.querySelector("#close-pop-up");
-// const saveNewTodoBtn = document.querySelector("#save-to-do");
 const toDoTitle = document.querySelector("#to-do-title");
 const toDoDescription = document.querySelector("#to-do-description");
 const toDoProject = document.querySelector("#to-do-project");
@@ -322,6 +322,69 @@ function loadTask(project) {
 		// Priority Btn
 		const priorityBtn = document.createElement("button");
 		priorityBtn.classList.add("to-do-priority");
+
+		let colorPopupActive = false;
+		priorityBtn.addEventListener("click", () => {
+			colorPopupActive = !colorPopupActive;
+
+			if (colorPopupActive) {
+				const colorPopUps = document.querySelectorAll("#color-pop-up");
+				if (colorPopUps.length > 0) {
+					colorPopUps.forEach((popUp) => {
+						mainContainer.removeChild(popUp);
+					});
+				}
+
+				// Create priorities Pop up
+				const colorPopup = document.createElement("div");
+				colorPopup.id = "color-pop-up";
+
+				const icons = [
+					{ className: "none" },
+					{ className: "low" },
+					{ className: "medium" },
+					{ className: "high" },
+				];
+
+				icons.forEach((icon) => {
+					const iconElement = document.createElement("i");
+					iconElement.className = `material-symbols-rounded icon ${icon.className}`;
+					iconElement.textContent = "radio_button_checked";
+					colorPopup.appendChild(iconElement);
+				});
+
+				mainContainer.appendChild(colorPopup);
+
+				colorPopup.addEventListener("click", (event) => {
+					const clickedElement = event.target;
+					if (clickedElement.classList.contains("icon")) {
+						item.priority = clickedElement.classList[2];
+						colorPopup.classList.remove("active");
+						loadTask(currentProject);
+					}
+				});
+
+				colorPopup.classList.add("active");
+
+				// Get the button's position
+				const buttonRect = priorityBtn.getBoundingClientRect();
+
+				// Calculate the options div's position
+				const optionsLeft = buttonRect.right;
+				const optionsTop = buttonRect.top;
+
+				// Set the options div's position
+				colorPopup.style.left = optionsLeft + "px";
+				colorPopup.style.top = optionsTop + "px";
+			} else {
+				const colorPopUps = document.querySelectorAll("#color-pop-up");
+				if (colorPopUps.length > 0) {
+					colorPopUps.forEach((popUp) => {
+						mainContainer.removeChild(popUp);
+					});
+				}
+			}
+		});
 
 		const priorityIcon = document.createElement("i");
 		priorityIcon.classList.add(

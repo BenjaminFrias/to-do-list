@@ -286,6 +286,26 @@ i.low {
 	color: var(--Low-priority);
 }
 
+#color-pop-up {
+	display: none;
+	position: absolute;
+	border: 1px solid var(--gray);
+	background: var(--light-gray);
+}
+
+#color-pop-up.active {
+	display: flex;
+	padding: 5px 0px;
+	justify-content: space-between;
+	flex-direction: column;
+	border-radius: 10px;
+}
+
+#color-pop-up i {
+	scale: 0.7;
+	cursor: pointer;
+}
+
 /* CREATE TODO POP UP */
 
 #to-do-pop-up,
