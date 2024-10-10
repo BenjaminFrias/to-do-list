@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>To-do List</title>
+		<title>Hacerit | To-do List web</title>
 
 		<!-- FONTS -->
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -30,7 +30,7 @@
 			<!-- SIDEBAR -->
 			<div class="sidebar open">
 				<div>
-					<h1 class="logo">To-do list</h1>
+					<h1 class="logo">Hacerit</h1>
 				</div>
 				<button type="button" id="sidebar-toggle-btn">
 					<i class="material-symbols-rounded icon"> dock_to_left </i>
@@ -39,7 +39,7 @@
 					<li>
 						<button
 							type="button"
-							class="project-btn"
+							class="sidebar-project-btn"
 							id="inbox-btn"
 						>
 							<i class="material-symbols-rounded icon"> home </i>
@@ -77,16 +77,17 @@
 
 					<button type="button" id="add-new-project-btn">
 						<i class="material-symbols-rounded icon"> add </i>
-						<span>New project</span>
 					</button>
 				</div>
 			</div>
 
 			<!-- Main to-do's container -->
 			<div class="main-to-do-list-container">
-				<h2 id="project-name">Inbox</h2>
-				<div class="division-line"></div>
-				<p id="to-dos-length"></p>
+				<div>
+					<h2 id="project-name">Inbox</h2>
+					<p id="to-dos-length"></p>
+					<div class="division-line"></div>
+				</div>
 				<ul id="to-do-list"></ul>
 				<button type="button" id="new-to-do-btn">New to do</button>
 			</div>

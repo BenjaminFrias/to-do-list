@@ -299,7 +299,9 @@ function loadTask(project) {
 		completeInput.name = "to-do-complete";
 
 		completeInput.addEventListener("click", () => {
-			toDoItem.classList.add("completed");
+			setTimeout(() => {
+				toDoItem.classList.add("completed");
+			}, 100);
 
 			setTimeout(() => {
 				todoItems.splice(i, 1);
@@ -308,7 +310,7 @@ function loadTask(project) {
 				const toDosLength = document.querySelectorAll(".to-do-item");
 				loadTask(currentProject);
 				updateNumberOfTasks(toDosLength.length);
-			}, 300);
+			}, 500);
 		});
 
 		// To do Title
