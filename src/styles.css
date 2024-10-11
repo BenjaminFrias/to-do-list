@@ -77,6 +77,18 @@ li {
 	transition: all 200ms ease;
 }
 
+@media (max-width: 750px) {
+	.sidebar {
+		z-index: 2;
+	}
+
+	.sidebar.open {
+		position: absolute;
+		height: 98%;
+		width: 65%;
+	}
+}
+
 .sidebar div:nth-child(1) {
 	display: flex;
 	justify-content: space-between;
@@ -85,15 +97,25 @@ li {
 
 #sidebar-toggle-btn {
 	display: flex;
-	position: absolute;
-	left: 220px;
-	top: 23px;
+	position: relative;
 	transition: all 200ms ease;
 }
 
 #sidebar-toggle-btn.closed {
-	left: 20px;
+	animation: return 200ms ease-out;
+	position: absolute;
+	top: 20px;
+	left: 8px;
 	transition: all 200ms ease;
+}
+
+@keyframes return {
+	0% {
+		left: 150px;
+	}
+	100% {
+		left: 8px;
+	}
 }
 
 .default-sidebar-list {
@@ -192,6 +214,16 @@ button.project-btn {
 .main-to-do-list-container.closed {
 	padding: 25px 120px;
 	transition: all 200ms ease;
+}
+
+@media (max-width: 750px) {
+	.main-to-do-list-container {
+		padding: 60px 10px;
+	}
+
+	.main-to-do-list-container.closed {
+		padding: 60px 10px;
+	}
 }
 
 ul#to-do-list {
@@ -347,7 +379,6 @@ i.low {
 #color-pop-up {
 	display: none;
 	position: absolute;
-	border: 1px solid var(--gray);
 	background: var(--light-gray);
 }
 
@@ -362,6 +393,12 @@ i.low {
 #color-pop-up i {
 	scale: 0.7;
 	cursor: pointer;
+	transition: all 100ms ease;
+}
+
+#color-pop-up i:hover {
+	scale: 0.75;
+	transition: all 100ms ease;
 }
 
 /* CREATE TODO POP UP */
@@ -386,6 +423,19 @@ i.low {
 	z-index: 999;
 	border-radius: 15px;
 	box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 750px) {
+	#to-do-pop-up,
+	#new-project-pop-up {
+		width: 95%;
+		height: 70%;
+	}
+
+	#to-do-pop-up div:nth-child(1) {
+		display: flex;
+		gap: 50px;
+	}
 }
 
 /* TODO'S POP UP INPUTS */
@@ -494,6 +544,10 @@ button#close-pop-up:hover {
 	font-size: 2rem;
 }
 
+#to-do-pop-up input[type="text"]#to-do-title {
+	width: 30px;
+}
+
 #to-do-description {
 	color: var(--gray);
 }
@@ -543,6 +597,12 @@ input#to-do-date.flatpickr-input {
 	width: 400px;
 	align-items: end;
 	justify-content: space-between;
+}
+
+@media (max-width: 750px) {
+	#new-project-pop-up {
+		width: 95%;
+	}
 }
 
 #new-project-pop-up input {
@@ -610,7 +670,7 @@ input#to-do-date.flatpickr-input {
 	box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
 	backdrop-filter: blur(3px);
 	-webkit-backdrop-filter: blur(2.8px);
-	z-index: 1;
+	z-index: 2;
 	opacity: 0;
 	visibility: hidden;
 	transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out,

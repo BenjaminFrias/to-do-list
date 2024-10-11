@@ -262,6 +262,7 @@ function loadProjectOptions() {
 // Load tasks
 
 function loadTask(project) {
+	checkWindowWidth();
 	toDoList.innerHTML = "";
 
 	const filteredTodoItems = todoItems.filter((todo) => {
@@ -385,11 +386,11 @@ function loadTask(project) {
 				const buttonRect = priorityBtn.getBoundingClientRect();
 
 				// Calculate the options div's position
-				const optionsLeft = buttonRect.right;
+				const optionsLeft = buttonRect.left;
 				const optionsTop = buttonRect.top;
 
 				// Set the options div's position
-				colorPopup.style.left = optionsLeft + "px";
+				colorPopup.style.left = optionsLeft + 10 + "px";
 				colorPopup.style.top = optionsTop + "px";
 			} else {
 				const colorPopUps = document.querySelectorAll("#color-pop-up");
@@ -588,3 +589,13 @@ function clearInputFields() {
 	toDoPriority.selectedIndex = 0;
 	toDoProject.selectedIndex = 0;
 }
+
+function checkWindowWidth() {
+	if (window.innerWidth < 450) {
+		sidebar.classList.remove("open");
+		toggleSidebarBtn.classList.add("closed");
+		contentListContainer.classList.add("closed");
+	}
+}
+
+window.addEventListener("resize", checkWindowWidth);
