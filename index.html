@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Todolist</title>
+
+		<link rel="shortcut icon" href="4c41727e5268a5079fe5.svg" type="image/svg+xml" />
+
+		<!-- FONTS -->
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap"
+			rel="stylesheet"
+		/>
+
+		<link
+			rel="stylesheet"
+			href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+		/>
+
+		<!-- SCRIPTS -->
+		<link
+			rel="stylesheet"
+			href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
+		/>
+		<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+	<script defer src="main.js"></script></head>
+	<body>
+		<div class="container">
+			<!-- SIDEBAR -->
+			<div class="sidebar open">
+				<div>
+					<h1 class="logo">Todolist</h1>
+					<button type="button" id="sidebar-toggle-btn">
+						<i class="material-symbols-rounded icon">
+							dock_to_left
+						</i>
+					</button>
+				</div>
+				<ul class="default-sidebar-list">
+					<li>
+						<button
+							type="button"
+							class="sidebar-project-btn"
+							id="inbox-btn"
+						>
+							<i class="material-symbols-rounded icon"> home </i>
+							<span>Inbox</span>
+						</button>
+					</li>
+					<li>
+						<button
+							type="button"
+							class="sidebar-project-btn"
+							id="today-btn"
+						>
+							<i class="material-symbols-rounded icon">
+								schedule
+							</i>
+							<span>Today</span>
+						</button>
+					</li>
+					<li>
+						<button
+							type="button"
+							class="sidebar-project-btn"
+							id="upcoming-btn"
+						>
+							<i class="material-symbols-rounded icon">
+								event_note
+							</i>
+							<span>Upcoming</span>
+						</button>
+					</li>
+				</ul>
+				<div class="sidebar-projects">
+					<h2>Projects</h2>
+					<ul class="projects-sidebar-list"></ul>
+
+					<button type="button" id="add-new-project-btn">
+						<i class="material-symbols-rounded icon"> add </i>
+					</button>
+				</div>
+			</div>
+
+			<!-- Main to-do's container -->
+			<div class="main-to-do-list-container">
+				<div>
+					<h2 id="project-name">Inbox</h2>
+					<p id="to-dos-length"></p>
+					<div class="division-line"></div>
+				</div>
+				<ul id="to-do-list"></ul>
+				<button type="button" id="new-to-do-btn">New to do</button>
+			</div>
+
+			<!-- Create and edit to do pop up -->
+			<div id="to-do-pop-up-container">
+				<div id="to-do-pop-up">
+					<div>
+						<input
+							type="text"
+							name="to-do-title"
+							id="to-do-title"
+							placeholder="Task name"
+							autocomplete="off"
+							required
+						/>
+						<button type="button" id="close-pop-up">
+							<i class="material-symbols-rounded icon"> close </i>
+						</button>
+					</div>
+					<input
+						type="text"
+						name="description"
+						id="to-do-description"
+						placeholder="Description"
+						autocomplete="off"
+					/>
+					<div>
+						<p>Project</p>
+
+						<select name="to-do-project" id="to-do-project">
+							<option value="Inbox">Inbox</option>
+						</select>
+					</div>
+					<div>
+						<p>Due date</p>
+						<div class="flatpickr" id="date-container">
+							<input
+								type="text"
+								name="to-do-date"
+								id="to-do-date"
+								placeholder="Select a due date"
+								autocomplete="off"
+								data-input
+							/>
+
+							<i
+								class="material-symbols-rounded icon input-button"
+								title="toggle"
+								data-toggle
+							>
+								calendar_month
+							</i>
+							<i
+								class="material-symbols-rounded icon input-button"
+								title="clear"
+								data-clear
+							>
+								close
+							</i>
+						</div>
+					</div>
+					<div>
+						<p>Priority</p>
+						<select name="to-do-priority" id="to-do-priority">
+							<option value="none" selected>None</option>
+							<option value="low">Low</option>
+							<option value="medium">Medium</option>
+							<option value="high">High</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div id="new-project-pop-up-container">
+				<div id="new-project-pop-up">
+					<input
+						type="text"
+						name="new-project-title"
+						id="new-project-title"
+						placeholder="Project name"
+						autocomplete="off"
+					/>
+					<button type="button" id="save-project-pop-up">
+						<i class="material-symbols-rounded icon"> add_box </i>
+					</button>
+					<button type="button" id="close-project-pop-up">
+						<i class="material-symbols-rounded icon"> close </i>
+					</button>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
